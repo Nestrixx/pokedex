@@ -1,4 +1,3 @@
-const typeSelector = document.getElementById('pokemon-types');
 window.onload = function getPokemonList() {
     fetch('https://pokeapi.co/api/v2/pokemon?limit=151').then(response => response.json())
         .then(pokemonList => {
@@ -8,22 +7,24 @@ window.onload = function getPokemonList() {
                 pokePromises.push(resolvedPokemon);
             }
             Promise.all(pokePromises).then((detailedPokemonList) => {
-                console.log('hooray', detailedPokemonList);
-                const pokemonList = document.getElementsByClassName("pokemonCards")[0];
+                const pokemonList = document.getElementsByClassName("pokemonWrapper")[0];
                 for (i = 0; i < detailedPokemonList.length; i++) {
+                    const pokemonCard = document.createElement('div');
+                    pokemonCard.className = "pokemonCard";
+
                     const pokemonImage = document.createElement('img');
-                    pokemonImage.src = detailedPokemonList[i].sprites.front_shiny;
-                    pokemonList.appendChild(pokemonImage);
+                    let pokemonName = detailedPokemonList[i].name;
+                    pokemonImage.src = `https://img.pokemondb.net/artwork/large/${pokemonName}.jpg`;
+                    pokemonImage.className = "pokemonImg";
+
+                    const pokemonParagraghElement = document.createElement('p');
+                    pokemonParagraghElement.textContent += detailedPokemonList[i].name;
+
+                    pokemonCard.appendChild(pokemonImage);
+                    pokemonCard.appendChild(pokemonParagraghElement);
+                    pokemonList.appendChild(pokemonCard);
+
                 }
             })
         });
-}
-
-function filterByType() {
-    console.log(typeSelector.value);
-}
-typeSelector.onchange = filterByType;
-
-function showMeData() {
-    console.log('hi');
 }

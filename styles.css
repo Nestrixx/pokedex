@@ -1,0 +1,13 @@
+.pokemonImg {
+    height: 266px;
+}
+
+.pokemonCard {
+    border: 1px solid blue;
+    margin: 8px;
+}
+
+.pokemonWrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
