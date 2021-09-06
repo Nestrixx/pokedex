@@ -12,6 +12,9 @@ window.onload = function getPokemonList() {
                     const pokemonCard = document.createElement('div');
                     pokemonCard.className = "pokemonCard";
 
+                    const artworkWrapper = document.createElement('div');
+                    artworkWrapper.className = "artworkWrapper";
+
                     const pokemonImage = document.createElement('img');
                     let pokemonName = detailedPokemonList[i].name;
                     pokemonImage.src = `https://img.pokemondb.net/artwork/large/${pokemonName}.jpg`;
@@ -20,7 +23,8 @@ window.onload = function getPokemonList() {
                     const pokemonParagraghElement = document.createElement('p');
                     pokemonParagraghElement.textContent += detailedPokemonList[i].name;
 
-                    pokemonCard.appendChild(pokemonImage);
+                    pokemonCard.appendChild(artworkWrapper);
+                    artworkWrapper.appendChild(pokemonImage);
                     pokemonCard.appendChild(pokemonParagraghElement);
                     pokemonList.appendChild(pokemonCard);
 
