@@ -1,4 +1,9 @@
-window.onload = function getPokemonList() {
+window.onload = function handleOnLoad() {
+    getPokemonList();
+    getPokemonTypes();
+}
+
+function getPokemonList() {
     fetch('https://pokeapi.co/api/v2/pokemon?limit=151').then(response => response.json())
         .then(pokemonList => {
             let pokePromises = [];
@@ -31,4 +36,16 @@ window.onload = function getPokemonList() {
                 }
             })
         });
+}
+
+function getPokemonTypes() {
+    fetch('https://pokeapi.co/api/v2/type').then(response => response.json())
+        .then(pokemonTypesInfo => {
+            for (i = 0; i < pokemonTypesInfo.results.length; i++) {
+                let pokemonTypeName = pokemonTypesInfo.results[i].name;
+                let pokemonOption = document.createElement('option');
+                pokemonOption.textContent = pokemonTypeName;
+                document.getElementById('pokemon-types').appendChild(pokemonOption);
+            }
+        })
 }
