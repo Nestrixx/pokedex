@@ -3,6 +3,8 @@ window.onload = function handleOnLoad() {
     getPokemonTypes();
 }
 
+let globalPokeList = [];
+
 function getPokemonList() {
     fetch('https://pokeapi.co/api/v2/pokemon?limit=151').then(response => response.json())
         .then(pokemonList => {
@@ -32,8 +34,8 @@ function getPokemonList() {
                     artworkWrapper.appendChild(pokemonImage);
                     pokemonCard.appendChild(pokemonParagraghElement);
                     pokemonList.appendChild(pokemonCard);
-
                 }
+                globalPokeList = detailedPokemonList;
             })
         });
 }
@@ -41,11 +43,28 @@ function getPokemonList() {
 function getPokemonTypes() {
     fetch('https://pokeapi.co/api/v2/type').then(response => response.json())
         .then(pokemonTypesInfo => {
+            const pokemonTypesSelect = document.getElementById('pokemon-types')
             for (i = 0; i < pokemonTypesInfo.results.length; i++) {
                 let pokemonTypeName = pokemonTypesInfo.results[i].name;
                 let pokemonOption = document.createElement('option');
                 pokemonOption.textContent = pokemonTypeName;
-                document.getElementById('pokemon-types').appendChild(pokemonOption);
+                pokemonTypesSelect.appendChild(pokemonOption);
             }
+
+            pokemonTypesSelect.addEventListener('change', filterByType);
         })
+}
+
+function filterByType(event) {
+    const selectedType = event.target.value;
+    let filteredPokemonList = [];
+    for (let i = 0; i < globalPokeList.length; i++) {
+        const pokemon = globalPokeList[i];
+        for (let q = 0; q < pokemon.types.length; q++) {
+            const pokemonType = pokemon.types[q].type.name;
+            if (pokemonType === selectedType) {
+                console.log(pokemon.name);
+            }
+        }
+    }
 }
