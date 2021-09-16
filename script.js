@@ -36,6 +36,8 @@ function getPokemonList() {
                     pokemonList.appendChild(pokemonCard);
                 }
                 globalPokeList = detailedPokemonList;
+                const pokemonSearchInput = document.getElementById('searchInput');
+                pokemonSearchInput.addEventListener('input', filterBySearch);
             })
         });
 }
@@ -43,15 +45,15 @@ function getPokemonList() {
 function getPokemonTypes() {
     fetch('https://pokeapi.co/api/v2/type').then(response => response.json())
         .then(pokemonTypesInfo => {
-            const pokemonTypesSelect = document.getElementById('pokemon-types')
+            const pokemonTypesSelect = document.getElementById('pokemon-types');
             for (i = 0; i < pokemonTypesInfo.results.length; i++) {
                 let pokemonTypeName = pokemonTypesInfo.results[i].name;
                 let pokemonOption = document.createElement('option');
                 pokemonOption.textContent = pokemonTypeName;
                 pokemonTypesSelect.appendChild(pokemonOption);
             }
-
             pokemonTypesSelect.addEventListener('change', filterByType);
+
         })
 }
 
@@ -66,6 +68,40 @@ function filterByType(event) {
     const pokemonList = document.getElementsByClassName('pokemonWrapper')[0];
     pokemonList.innerHTML = '';
 
+
+    for (i = 0; i < newPokeArray.length; i++) {
+        const pokemonCard = document.createElement('div');
+        pokemonCard.className = "pokemonCard";
+
+        const artworkWrapper = document.createElement('div');
+        artworkWrapper.className = "artworkWrapper";
+
+        const pokemonImage = document.createElement('img');
+        let pokemonName = newPokeArray[i].name;
+        pokemonImage.src = `https://img.pokemondb.net/artwork/large/${pokemonName}.jpg`;
+        pokemonImage.className = "pokemonImg";
+
+        const pokemonParagraghElement = document.createElement('p');
+        pokemonParagraghElement.textContent += newPokeArray[i].name;
+
+        pokemonCard.appendChild(artworkWrapper);
+        artworkWrapper.appendChild(pokemonImage);
+        pokemonCard.appendChild(pokemonParagraghElement);
+        pokemonList.appendChild(pokemonCard);
+    }
+}
+
+function filterBySearch(event) {
+    const currentSearchInput = event.target.value.toLowerCase();
+    let newPokeArray = [];
+    for (let i = 0; i < globalPokeList.length; i++) {
+        const slicedName = globalPokeList[i].name.slice(0, currentSearchInput.length);
+        if (currentSearchInput === slicedName) {
+            newPokeArray.push(globalPokeList[i]);
+        }
+    }
+    const pokemonList = document.getElementsByClassName('pokemonWrapper')[0];
+    pokemonList.innerHTML = '';
 
     for (i = 0; i < newPokeArray.length; i++) {
         const pokemonCard = document.createElement('div');
